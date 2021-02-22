@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>Mapas</title>
+        <link rel="stylesheet" href="https://js.arcgis.com/3.35/esri/css/esri.css">
+        <script src="https://js.arcgis.com/3.35/"></script>
+        <script src="Mapas.js"></script>
+        <style>html, body, #divMap{            
+            height: 100%;           
+            margin: 0;
+            padding: 0;
+        }
+        #divMap{
+            height: 75%;
+            width: 100%;
+            border: solid;
+        }
+        #BasemapToggle {
+            position: absolute;
+            top: 85px;
+            right: 20px;
+            z-index: 50;
+        }
+        </style>
+    </head>
+    <body>
+        <h1>Mapas API</h1>
+        <div id="divMap"></div>
+        <div id="BasemapToggle"></div>
+    </body>
+</html>
