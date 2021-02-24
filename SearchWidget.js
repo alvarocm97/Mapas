@@ -1,17 +1,29 @@
 var mapMain;
 var search
 var taskLocator
+var printer
+var printTask
+var params
+var template
+var directions
 
 // @formatter:off
 require([
         "esri/map",
         "esri/dijit/Search",
         "esri/tasks/locator",
-        "esri/graphic",
+        
 
-        "esri/symbols/SimpleMarkerSymbol",
-        "esri/symbols/TextSymbol",
+        "esri/symbols/SimpleMarkerSymbol",        
         "esri/symbols/Font",
+        "esri/graphic",
+        "esri/symbols/TextSymbol",
+        
+
+        
+        "esri/tasks/PrintTemplate",
+        "esri/dijit/Print",        
+        "esri/dijit/Directions",
 
         "dojo/_base/Color",
         "dojo/_base/array",
@@ -23,8 +35,8 @@ require([
 
         "dijit/layout/BorderContainer",
         "dijit/layout/ContentPane"],
-    function (Map, Search, Locator, Graphic,
-              SimpleMarkerSymbol, TextSymbol, Font,
+    function (Map, Search, Locator, 
+              SimpleMarkerSymbol, Font, Graphic, TextSymbol,PrintTemplate, Print, Directions,
               Color, array,
               dom, on, parser, ready,
               BorderContainer, ContentPane) {
@@ -80,8 +92,6 @@ require([
                 var objAddress = {"SingleLine" : dom.byId("taAddress").value}
                 var params = {address : objAddress,
                     outFields : ["Loc_name"]}
-
-
                 /*
                 * Step: Execute the task
                 */
@@ -113,12 +123,13 @@ require([
                         /*
                         * Step: Retrieve the result's geometry
                         */
-
+                       geometryLocation = candidate.location;
 
                         /*
                         * Step: Display the geocoded location on the map
                         */
-
+                       var graphicResult = new Graphic(geometryLocation, symbolMarker, attributesCandidate);
+                       mapMain.graphics.add(graphicResult);
 
                         // display the candidate's address as text
                         var sAddress = candidate.address;
@@ -135,8 +146,64 @@ require([
                 if (geometryLocation !== undefined) {
                     mapMain.centerAndZoom(geometryLocation, 15);
                 }
-        }
+        };
+        /*
+             * Step: create an array of JSON objects that will be used to create print templates
+             */
 
+            var myLayouts = [{
+             "name" : "Letter ANSI A Landscape",
+             "label" : "Landscape (PDF)",
+             "format" : "pdf",
+             "options" : {
+             "legendLayers" : [], // empty array means no legend
+             "scalebarUnit" : "Miles",
+             "titleText" : "Landscape PDF"
+             }
+             }, {
+             "name" : "Letter ANSI A Portrait",
+             "label" : "Portrait (JPG)",
+             "format" : "jpg",
+             "options" : {
+             "legendLayers" : [],
+             "scaleBarUnit" : "Miles",
+             "titleText" : "Portrait JPG"
+             }
+             }];
+            
+            /*
+             * Step: create the print templates
+             */
+
+            var myTemplates = [];
+             dojo.forEach(myLayouts, function(lo) {
+             var t = new PrintTemplate();
+             t.layout = lo.name;
+             t.label = lo.label;
+             t.format = lo.format;
+             t.layoutOptions = lo.options
+             myTemplates.push(t);
+             });                 
+
+            /*
+             * Step: Add the Print widget
+             */
+            printer = new Print({
+                map : mapMain,
+                url : "http://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task/execute",
+                templates : myTemplates
+              }, "divPrint");
+              printer.startup();
+
+              /*
+             * Step: Add the Directions widget
+             */
+                 
+          directions = new Directions({
+            map: mapMain,
+            routeTaskUrl: "http://utility.arcgis.com/usrsvcs/appservices/OM1GNiiACNJceMRn/rest/services/World/Route/NAServer/Route_World"},
+            "directionsDiv");
+          directions.startup(); 
     });
 
 });         
