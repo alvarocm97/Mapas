@@ -64,7 +64,20 @@ require(["esri/map",
         zoom: 4           
     });      
 
-      
+      dynamicMap = new ArcGISDynamicMapServiceLayer ("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer", {        
+        opacity : 0.2        
+      });
+      dynamicMap.setVisibleLayers([0, 1, 3]);
+
+      var outFieldsQuakes = ["EQID", "UTC_DATETIME", "MAGNITUDE", "PLACE"];      
+
+      featureLayer = new FeatureLayer ("https://services.arcgis.com/ue9rwulIoeLEI9bj/arcgis/rest/services/Earthquakes/FeatureServer/0", {outFields: outFieldsQuakes});
+
+      featureLayer.setDefinitionExpression("MAGNITUDE >= 2");
+
+      myMap.addLayer(dynamicMap);
+
+      myMap.addLayer(featureLayer);
 
       myMap.on("load", initDrawing);
 
@@ -171,21 +184,6 @@ require(["esri/map",
             changeQuakesRenderer();
 
         });
-        dynamicMap = new ArcGISDynamicMapServiceLayer ("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer", {        
-        opacity : 0.2        
-      });
-      
-      dynamicMap.setVisibleLayers([0, 1, 3]);
-
-      var outFieldsQuakes = ["EQID", "UTC_DATETIME", "MAGNITUDE", "PLACE"];      
-
-      featureLayer = new FeatureLayer ("https://services.arcgis.com/ue9rwulIoeLEI9bj/arcgis/rest/services/Earthquakes/FeatureServer/0", {outFields: outFieldsQuakes});
-
-      featureLayer.setDefinitionExpression("MAGNITUDE >= 2");
-
-      myMap.addLayer(dynamicMap);
-
-      myMap.addLayer(featureLayer);
 
         function changeQuakesRenderer() {
 
@@ -220,7 +218,7 @@ require(["esri/map",
 
              earthquakeFeature.setSizeInfo(sizeInfo);
 
-        }
+        };
 
 
         function changeCountiesRenderer() {
