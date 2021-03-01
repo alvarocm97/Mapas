@@ -92,7 +92,7 @@ require(["esri/map",
         
         var geometryInput = params.geometry
 
-        const symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255, 255, 0]), 2), new Color([255, 255, 0, 0.2]));
+        const symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, c, new Color([255, 255, 0, 0.2]));
 
         myMap.graphics.clear();
                         

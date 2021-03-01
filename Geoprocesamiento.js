@@ -71,6 +71,10 @@ function (Map, Draw, Graphic, graphicsUtils, Geoprocessor, FeatureSet,LinearUnit
              */
             var fsInputPoint = new FeatureSet();
             fsInputPoint.features.push(graphicViewpoint);
+            // "geometryType":"geometryType",
+            // "spatialReference":<spatialReference>,
+            // "fields":<fields>,
+            // "features":<features></features>
             
             /*
              * Step: Prepare the second input parameter
@@ -98,7 +102,6 @@ function (Map, Draw, Graphic, graphicsUtils, Geoprocessor, FeatureSet,LinearUnit
         }
 
         function displayViewshed(results, messages) {
-            console.log(results)
 
             // polygon symbol for drawing results
             var sfsResultPolygon = new SimpleFillSymbol();
