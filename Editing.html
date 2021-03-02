@@ -1,16 +1,30 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
     <head>
-        <meta charset="utf-8">
-        <title>Editing</title>  
-        <link rel="stylesheet" href="https://js.arcgis.com/3.35/esri/css/esri.css">
-        <script src="https://js.arcgis.com/3.35/"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Editing</title>
+        <script>
+            var dojoConfig = {
+                async: true
+            };
+        </script>  
+        <link rel="stylesheet" href="http://js.arcgis.com/3.18/dijit/themes/nihilo/nihilo.css">
+        <link rel="stylesheet" href="http://js.arcgis.com/3.18/esri/css/esri.css">
+        <link rel="stylesheet" href="Editing.css"/>
+        <script src="http://js.arcgis.com/3.18/"></script>
         <script src="Editing.js"></script>
     </head>
-    <body>        
-        <div id='content' style='width:100%'></div>
-        <div id="editorDiv"></div>   
-        <div id="divMap"></div>
-
-    </body>
+    <body class="nihilo">
+        <div id="bcMain" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar'">
+            <div id="cpTop" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
+                <div id="divTop"></div>
+            </div>
+            <div id="cpLeft" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'left'">
+                <div id="divLeft"></div>
+            </div>
+            <div id="cpCenter" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
+                <div id="divMap"></div>
+            </div>
+        </div>
+        </body>
 </html>
