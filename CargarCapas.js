@@ -62,7 +62,7 @@ require(["esri/map", "esri/geometry/Extent", "esri/dijit/BasemapToggle",  "esri/
       scalebar = new Scalebar ({
           map: myMap,
           attachTo: "bottom-center,",
-          scalebarStyle: "ruler",
+        //   scalebarStyle: "ruler",
           scalebarUnit: "dual"
       }, "Scalebar")
       scalebar.startup();

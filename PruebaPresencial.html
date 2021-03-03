@@ -2,8 +2,6 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <!--The viewport meta tag is used to improve the presentation and behavior of the samples
-      on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
     <title></title>
 
@@ -45,23 +43,40 @@
 
           <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="title:'Leyenda', selected:true">
             <div id="legendDiv"></div>
-          </div>
 
-         
+        </div>         
 
         </div>
+
       </div>
 
       <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+
         <div id="divSearch"></div>
-        <div id="divOverView"></div>
+
+        <div id="divOverView"></div>  
+
+        <div id="desplegable" data-dojo-type="dijit.TitlePane" data-dojo-props="title:'Switch Basemap', open:false">
+
+        <div data-dojo-type="dijit.layout.ContentPane" style="width: 200px; height:150px; overflow:auto;">
+        
+        <div id="basemapGallery"></div>
+
+          </div>
+
+        </div>
+
+        <div id="scalebar"></div>
 
       </div>
 
       <div id="footer" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'bottom'">
 
-        <label for="dtb">Introduzca el nombre de un estado:</label> <input id="dtb" data-dojo-type="dijit/form/TextBox" value="Washington" />
+        <label for="dtb">Introduzca el nombre de un estado:</label>
+        <input id="dtb" data-dojo-type="dijit.form.TextBox" value="Washington" />
+
         <button id="progButtonNode" type="button">Ir al estado</button>
+
       </div>
 
     </div>

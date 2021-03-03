@@ -8,31 +8,49 @@ var map;
         "esri/dijit/Scalebar",
         "esri/dijit/Search",
         "esri/dijit/OverviewMap",
+        "esri/dijit/PopupTemplate",
+        "esri/tasks/query",
 
 
         "dojo/ready",
         "dojo/parser",
         "dojo/on",
         "dojo/_base/array",
+        "dojo/dom",
 
         "dijit/layout/TabContainer",
+        "dijit/TitlePane",
         "dijit/layout/ContentPane",
         "dijit/layout/BorderContainer",
         "dojo/domReady!"],
         function(
-          Map, FeatureLayer, Extent, BasemapGallery, Legend, Scalebar, Search, OverviewMap, ready, parser, on, array, TabContainer, ContentPane, BorderContainer
-
-        ) {
+          Map, FeatureLayer, Extent, BasemapGallery, Legend, Scalebar, Search, OverviewMap, PopupTemplate, Query, ready, parser, on, array, dom, TabContainer, TitlePane, ContentPane, BorderContainer) {
 
         ready(function () {
 
-        parser.parse();
+        // parser.parse();
 
 
         on(dojo.byId("progButtonNode"),"click",fQueryEstados);
         
         function fQueryEstados(){
-         alert("Evento del botón Seleccionar ciudades")
+                  
+         var estados = new Query();   
+         
+         var texto = dom.byId("dtb").value
+
+         estados.where = "State_Name = '" + texto + "'"
+
+            states.selectFeatures(estados, FeatureLayer.SELECTION_NEW);
+
+            states.on("selection-complete", focusOnMap)            
+        };
+        function focusOnMap(params){
+          
+          var newExtent = params.features[0].geometry.getExtent(); 
+
+          map.setExtent(newExtent);
+
         };
 
         map = new Map("map", {
@@ -66,38 +84,59 @@ var map;
 
         overview.startup();
         
-    //   var basemapGallery = new BasemapGallery({
-    //       map: map,
-    //       basemapsGroup: { owner: "esri", title: "Community Basemaps" }
-    //   }, "BasemapGallery");
+        var basemapGallery = new BasemapGallery({
+          showArcGISBasemaps: true,
+          map: map
+        }, "basemapGallery");
 
-    //   basemapGallery.add(basemapGallery);
+        console.log("Si")
+
+        basemapGallery.startup();
+
+        var template = new PopupTemplate({
+          "title": "STATE:  {STATE_NAME}",
+          "fieldInfos": [ {
+              "fieldName": "POP2000",
+              "format": {
+                  "places": 2,
+                  "digitSeparator": true
+              }
+          },
+          {"fieldName": "POP00_SQMI",
+          "format": {
+              "places": 2,
+              "digitSeparator": true
+          }},
+          {"fieldName": "ss6.gdb.States.area",
+          "format": {
+              "places": 2,
+              "digitSeparator": true
+          }}],
+            "description": "Población total: {POP2000}<br>Densidad de población: {POP00_SQMI}<br>Area: {ss6.gdb.States.area}"
+      });
 
     var cities = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0", {outFields : ["*"]});
 
     var highways = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/1", {outFields : ["*"]});
 
-    var states = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {outFields : ["*"]});
+    var states = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2", {outFields : ["*"], infoTemplate: template});
 
-    var counties = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/3", {outFields : ["*"]});
+    var counties = new FeatureLayer("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/3", {outFields : ["State_Name"], opacity: 0.3});
 
     map.addLayers([cities, highways, states, counties]);
 
-    // var scalebar = new Scalebar ({
-    //     map: map,
-    //     attachTo: "bottom-center,",
-    //     scalebarStyle: "ruler",
-    //     scalebarUnit: "dual"
-    // }, "Scalebar")
+    var scalebar = new Scalebar ({
+        map: map,
+        attachTo: "bottom-center",
+        scalebarStyle: "line",
+        scalebarUnit: "metric"         
+    });
 
-    // scalebar.startup();
-    
+    var legend = new Legend ({
+        map: map,      
+    }, "legendDiv")
 
-    // var legend = new Legend ({
-    //     map: map
-    // }, "legendDiv")
-
-    // legend.startup();
+    legend.startup();
 
     });
 
